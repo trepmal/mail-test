@@ -22,7 +22,7 @@ add_action( 'wp_ajax_' . esc_js( __NAMESPACE__ . '_send' ), __NAMESPACE__ . '\se
  * Setup admin menu
  */
 function menu() {
-	add_management_page( __( 'Test wp_mail', 'some-plugin' ), __( 'Test wp_mail', 'some-plugin' ), 'manage_options', __CLASS__, __NAMESPACE__ . '\page' );
+	add_management_page( __( 'Test wp_mail', 'mail-test ), __( 'Test wp_mail', 'mail-test ), 'manage_options', __CLASS__, __NAMESPACE__ . '\page' );
 }
 
 /**
@@ -36,12 +36,13 @@ function page() {
 		'loadingGif' => admin_url( 'images/wpspin_light.gif' ),
 	) );
 	?><div class="wrap">
-	<h2><?php esc_html_e( 'Test wp_mail()', 'some-plugin' ); ?></h2>
+	<h2><?php esc_html_e( 'Test wp_mail()', 'mail-test ); ?></h2>
 	<p>
 		<?php $email = wp_get_current_user()->user_email; ?>
-		<input type="email" id="send-test-email" value="<?php echo esc_attr( $email ); ?>" />
+		<label><?php esc_html_e( 'Send to:', 'mail-test ); ?>
+		<input type="email" id="send-test-email" class="regular-text" value="<?php echo esc_attr( $email ); ?>" /></label>
 	</p>
-	<?php submit_button( __( 'Send', 'some-plugin' ), 'primary', 'send-test' ); ?>
+	<?php submit_button( __( 'Send', 'mail-test ), 'primary', 'send-test' ); ?>
 	<p id="send-test-result"></p>
 	</div><?php
 }
@@ -58,23 +59,23 @@ function send_callback() {
 
 	if ( ! is_email( $to ) ) {
 		wp_send_json_error( array(
-			'message' => __( 'Invalid email address', 'some-plugin' )
+			'message' => __( 'Invalid email address', 'mail-test )
 		) );
 	}
 
-	$subject = apply_filters( 'mail_test_subject', __( 'WordPress Mail Test', 'some-plugin' ) );
-	$body    = apply_filters( 'mail_test_body', __( 'Lorem ipsum', 'some-plugin' ) );
+	$subject = apply_filters( 'mail_test_subject', __( 'WordPress Mail Test', 'mail-test ) );
+	$body    = apply_filters( 'mail_test_body', __( 'Lorem ipsum', 'mail-test ) );
 
 	$return  = wp_mail( $to, $subject, $body );
 
 	if ( $return ) {
 		wp_send_json_success( array(
-			'message' => __( 'WordPress believes this email was sent successfully.', 'some-plugin' ),
+			'message' => __( 'WordPress believes this email was sent successfully.', 'mail-test ),
 			'data'    => $return,
 		) );
 	} else {
 		wp_send_json_error( array(
-			'message' => __( 'Failed to send.', 'some-plugin' ),
+			'message' => __( 'Failed to send.', 'mail-test ),
 			'data'    => $return
 		) );
 	}
